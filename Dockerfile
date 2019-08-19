@@ -1,6 +1,4 @@
-FROM gcr.io/google-containers/fluentd-elasticsearch:v2.4.0
+FROM gcr.io/stackdriver-agents/stackdriver-logging-agent:0.6-1.6.0-1
 
-RUN apt-get update; apt-get upgrade -y
-
-RUN gem install fluent-plugin-loki
+RUN /opt/google-fluentd/embedded/bin/gem install fluent-plugin-loki
 
