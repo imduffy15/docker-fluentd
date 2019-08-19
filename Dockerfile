@@ -1,4 +1,9 @@
-FROM gcr.io/stackdriver-agents/stackdriver-logging-agent:0.6-1.6.0-1
+FROM grafana/fluent-plugin-grafana-loki:master
 
-RUN /opt/google-fluentd/embedded/bin/gem install fluent-plugin-loki
+RUN gem install fluent-plugin-detect-exceptions
+RUN gem install fluent-plugin-kubernetes_metadata_filter
+RUN gem install fluent-plugin-concat
+RUN gem install fluent-plugin-route
+RUN gem install fluent-plugin-grok-parser
+RUN gem install fluent-plugin-rewrite-tag-filter
 
