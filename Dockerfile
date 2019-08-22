@@ -1,9 +1,34 @@
-FROM grafana/fluent-plugin-grafana-loki:master
+FROM fluent/fluentd:v1.7-debian
 
-RUN gem install fluent-plugin-detect-exceptions
-RUN gem install fluent-plugin-kubernetes_metadata_filter
-RUN gem install fluent-plugin-concat
-RUN gem install fluent-plugin-route
-RUN gem install fluent-plugin-grok-parser
-RUN gem install fluent-plugin-rewrite-tag-filter
+USER root
+
+RUN apt-get update \
+ && buildDeps=" \
+      make gcc g++ libc-dev \
+      wget bzip2 gnupg dirmngr \
+    " \
+ && apt-get install -y --no-install-recommends $buildDeps \
+ && gem install fluent-plugin-kubernetes_metadata_filter \
+ && gem install fluent-plugin-concat \
+ && gem install fluent-plugin-route \
+ && gem install fluent-plugin-grok-parser \
+ && gem install fluent-plugin-prometheus \
+ && gem install fluent-plugin-rewrite-tag-filter \
+ && gem install fluent-plugin-google-cloud \
+ && gem install fluent-plugin-record-reformer \
+ && gem install fluent-plugin-multi-format-parser \
+ && gem install fluent-plugin-systemd \
+ && gem install fluent-plugin-detect-exceptions \
+ && apt-get purge -y --auto-remove \
+                  -o APT::AutoRemove::RecommendsImportant=false \
+                  --allow-remove-essential \
+                  $buildDeps \
+ && rm -rf /var/lib/apt/lists/* \
+ && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem \
+ && mkdir -p /var/log/fluentd-buffers \
+ && chown fluent:fluent -R /var/log/fluentd-buffers
+
+COPY out_google_cloud.rb /usr/local/bundle/gems/fluent-plugin-google-cloud-0.7.16/lib/fluent/plugin/out_google_cloud.rb
+
+COPY fluentd.conf /fluentd/etc/fluent.conf
 
