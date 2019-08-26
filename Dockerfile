@@ -19,6 +19,7 @@ RUN apt-get update \
  && gem install fluent-plugin-multi-format-parser \
  && gem install fluent-plugin-systemd \
  && gem install fluent-plugin-detect-exceptions \
+ && gem install fluent-plugin-gcs \
  && apt-get purge -y --auto-remove \
                   -o APT::AutoRemove::RecommendsImportant=false \
                   --allow-remove-essential \
@@ -28,7 +29,4 @@ RUN apt-get update \
  && mkdir -p /var/log/fluentd-buffers \
  && chown fluent:fluent -R /var/log/fluentd-buffers
 
-COPY out_google_cloud.rb /usr/local/bundle/gems/fluent-plugin-google-cloud-0.7.16/lib/fluent/plugin/out_google_cloud.rb
-
 COPY fluentd.conf /fluentd/etc/fluent.conf
-
