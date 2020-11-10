@@ -20,6 +20,7 @@ RUN apt-get update \
  && gem install fluent-plugin-systemd \
  && gem install fluent-plugin-detect-exceptions \
  && gem install fluent-plugin-gcs \
+ && gem install fluent-plugin-bigquery \
  && apt-get purge -y --auto-remove \
                   -o APT::AutoRemove::RecommendsImportant=false \
                   --allow-remove-essential \
